@@ -5,12 +5,12 @@ BUILD_DIR = build
 BIN_DIR = bin
 SRC_DIR = src
 
-SRC_FILES = $(SRC_DIR)/client_macos.cpp
+SRC_FILES = $(SRC_DIR)/client.cpp
 OBJ_FILES = $(SRC_FILES:$(SRC_DIR)/%.cpp=$(BUILD_DIR)/%.o)
 
 TARGET = $(BIN_DIR)/client.exe
 
-# LIBS = -lws2_32
+LIBS = -lws2_32
 
 all: create_dirs $(TARGET)
 
