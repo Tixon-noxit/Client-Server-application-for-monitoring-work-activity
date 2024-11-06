@@ -5,14 +5,19 @@ BUILD_DIR = build
 BIN_DIR = bin
 SRC_DIR = src
 
-SRC_FILES = $(SRC_DIR)/client.cpp
+SRC_FILES = $(SRC_DIR)/client_macos.cpp
 OBJ_FILES = $(SRC_FILES:$(SRC_DIR)/%.cpp=$(BUILD_DIR)/%.o)
 
 TARGET = $(BIN_DIR)/client.exe
 
-LIBS = -lws2_32
+# LIBS = -lws2_32
 
-all: $(TARGET)
+all: create_dirs $(TARGET)
+
+create_dirs:
+	@echo "Creating directories..."
+	mkdir -p $(BUILD_DIR) 
+	mkdir -p $(BIN_DIR)
 
 $(TARGET): $(OBJ_FILES)
 	@echo "Linking..."
