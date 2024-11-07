@@ -27,6 +27,15 @@ def get_all_clients():
     conn.close()
     return clients
 
+
+# Функция для Удаления всех клиентов из базы данных
+def delete_all_clients():
+    conn = sqlite3.connect("clients.db")
+    c = conn.cursor()
+    c.execute("DELETE FROM clients")  # Удаляем всех клиентов
+    conn.commit()  # Применяем изменения
+    conn.close()
+
 # Функция для добавления нового клиента
 def add_client(ip, username):
     conn = sqlite3.connect("clients.db")
@@ -58,10 +67,19 @@ def api_clients():
 # API для добавления нового клиента
 @app.route('/api/add_client', methods=['POST'])
 def api_add_client():
-    ip = request.json['ip']
-    username = request.json['username']
+    data = request.get_json()  # Получаем JSON-данные
+    ip = data.get('ip')
+    username = data.get('username')
     add_client(ip, username)
     return jsonify({"status": "success"}), 201
+
+
+# API для добавления нового клиента
+@app.route('/api/delete_all_client', methods=['GET'])
+def api_delete_all_client():
+    delete_all_clients()
+    clients = get_all_clients()
+    return render_template('index.html', clients=clients)
 
 # API для обновления последней активности клиента
 @app.route('/api/update_activity', methods=['POST'])
@@ -72,4 +90,4 @@ def api_update_activity():
 
 if __name__ == "__main__":
     init_db()  # Инициализация БД при запуске
-    app.run(host="0.0.0.0", port=5001, debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)
