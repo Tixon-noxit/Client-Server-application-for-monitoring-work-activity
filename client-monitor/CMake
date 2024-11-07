@@ -1,0 +1,45 @@
+cmake_minimum_required(VERSION 3.10)
+
+# Название проекта
+project(ClientChopCentaur)
+
+# Флаг стандарта C++
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Пути к исходным файлам
+set(SRC_DIR src)
+set(BIN_DIR bin)
+set(BUILD_DIR build)
+
+# Путь к библиотекам
+set(LIBS ws2_32 gdi32)
+
+# Добавление каталогов для сборки
+file(MAKE_DIRECTORY ${BUILD_DIR})
+file(MAKE_DIRECTORY ${BIN_DIR})
+
+# Источник программы
+set(SRC_FILES ${SRC_DIR}/client_chop_centaur.cpp ${SRC_DIR}/captureScreen.cpp)
+
+# Источник программы для автозапуска
+set(ADD_TO_STARTUP_SRC ${SRC_DIR}/addToStartup.cpp)
+
+# Исполнимый файл для client_chop_centaur
+add_executable(client_chop_centaur ${SRC_FILES})
+target_link_libraries(client_chop_centaur ${LIBS})
+
+# Исполнимый файл для addToStartup
+add_executable(addToStartup ${ADD_TO_STARTUP_SRC})
+target_link_libraries(addToStartup ${LIBS})
+
+# Флаги компилятора
+target_compile_options(client_chop_centaur PRIVATE -Wall -Wextra -O2 -g)
+target_compile_options(addToStartup PRIVATE -Wall -Wextra -O2 -g)
+
+# Выходной каталог для исполнимых файлов
+set_target_properties(client_chop_centaur PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${BIN_DIR})
+
+set_target_properties(addToStartup PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${BIN_DIR})

