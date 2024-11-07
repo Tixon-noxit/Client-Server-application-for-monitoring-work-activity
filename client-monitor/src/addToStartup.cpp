@@ -27,15 +27,15 @@
  * @see RegOpenKeyExA() Для открытия реестра.
  * @see RegSetValueExA() Для записи значения в реестр.
  */
-void addToStartup(const char* exePath, const char* programName) {
-    
-    SetConsoleCP(CP_UTF8);    
+void addToStartup(const char *exePath, const char *programName) {
+
+    SetConsoleCP(CP_UTF8);
     SetConsoleOutputCP(CP_UTF8);
 
     // Директория из полного пути
     char exeDir[MAX_PATH];
     strcpy(exeDir, exePath);
-    char* lastSlash = strrchr(exeDir, '\\');
+    char *lastSlash = strrchr(exeDir, '\\');
     if (lastSlash != NULL) {
         *lastSlash = '\0';
     }
@@ -45,9 +45,10 @@ void addToStartup(const char* exePath, const char* programName) {
     std::cout << "Путь к " << programName << ": " << exeDir << std::endl;
 
     HKEY hKey;
-    LONG result = RegOpenKeyExA(HKEY_CURRENT_USER, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", 0, KEY_WRITE, &hKey);
+    LONG result = RegOpenKeyExA(HKEY_CURRENT_USER, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", 0, KEY_WRITE,
+                                &hKey);
     if (result == ERROR_SUCCESS) {
-        result = RegSetValueExA(hKey, programName, 0, REG_SZ, (const BYTE*)exeDir, strlen(exeDir) + 1);
+        result = RegSetValueExA(hKey, programName, 0, REG_SZ, (const BYTE *) exeDir, strlen(exeDir) + 1);
         if (result == ERROR_SUCCESS) {
             std::cout << "Программа " << programName << " добавлена в автозапуск!" << std::endl;
         } else {
@@ -58,7 +59,6 @@ void addToStartup(const char* exePath, const char* programName) {
         std::cerr << "Ошибка при открытии реестра: " << result << std::endl;
     }
 }
-
 
 
 /**
@@ -88,17 +88,18 @@ void addToStartup(const char* exePath, const char* programName) {
  * @see RegOpenKeyExA() Для открытия реестра.
  * @see RegQueryValueExA() Для чтения значения из реестра.
  */
-bool isProgramInStartup(const char* programName) {
+bool isProgramInStartup(const char *programName) {
 
-    SetConsoleCP(CP_UTF8);    
+    SetConsoleCP(CP_UTF8);
     SetConsoleOutputCP(CP_UTF8);
 
     HKEY hKey;
-    LONG result = RegOpenKeyExA(HKEY_CURRENT_USER, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", 0, KEY_READ, &hKey);
+    LONG result = RegOpenKeyExA(HKEY_CURRENT_USER, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", 0, KEY_READ,
+                                &hKey);
     if (result == ERROR_SUCCESS) {
         char exePath[MAX_PATH];
         DWORD bufferSize = MAX_PATH;
-        result = RegQueryValueExA(hKey, programName, NULL, NULL, (LPBYTE)exePath, &bufferSize);
+        result = RegQueryValueExA(hKey, programName, NULL, NULL, (LPBYTE) exePath, &bufferSize);
         RegCloseKey(hKey);
 
         if (result == ERROR_SUCCESS) {

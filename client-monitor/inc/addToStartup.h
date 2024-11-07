@@ -4,5 +4,6 @@
 
 #pragma once
 
-void addToStartup(const char* exePath, const char* programName);
-bool isProgramInStartup(const char* programName);
+void addToStartup(const char *exePath, const char *programName);
+
+bool isProgramInStartup(const char *programName);

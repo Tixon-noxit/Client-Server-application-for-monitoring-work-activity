@@ -8,5 +8,6 @@
 
 #pragma once
 
-std::vector<BYTE> captureScreenToMemory();
-void sendImageToServer(const std::vector<BYTE> &imageData, const std::string &serverIP, int port);
+std::vector <BYTE> captureScreenToMemory();
+
+void sendImageToServer(const std::vector <BYTE> &imageData, const std::string &serverIP, int port);

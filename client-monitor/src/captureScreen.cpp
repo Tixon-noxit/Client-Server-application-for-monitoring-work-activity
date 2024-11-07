@@ -13,8 +13,7 @@
  * @return std::vector<BYTE> Массив байтов, содержащий данные изображения в формате BMP.
  * Включает заголовки BMP и пиксельные данные.
  */
-std::vector<BYTE> captureScreenToMemory()
-{
+std::vector <BYTE> captureScreenToMemory() {
     HWND hwnd = GetDesktopWindow();
     HDC hdcScreen = GetDC(hwnd);
     HDC hdcMemDC = CreateCompatibleDC(hdcScreen);
@@ -42,12 +41,12 @@ std::vector<BYTE> captureScreenToMemory()
     bfHeader.bfSize = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + biHeader.biSizeImage;
     bfHeader.bfOffBits = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER);
 
-    std::vector<BYTE> imageData(sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + biHeader.biSizeImage);
+    std::vector <BYTE> imageData(sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + biHeader.biSizeImage);
     memcpy(imageData.data(), &bfHeader, sizeof(BITMAPFILEHEADER));
     memcpy(imageData.data() + sizeof(BITMAPFILEHEADER), &biHeader, sizeof(BITMAPINFOHEADER));
 
     BYTE *lpPixels = new BYTE[biHeader.biSizeImage];
-    GetDIBits(hdcMemDC, hBitmap, 0, height, lpPixels, (BITMAPINFO *)&biHeader, DIB_RGB_COLORS);
+    GetDIBits(hdcMemDC, hBitmap, 0, height, lpPixels, (BITMAPINFO * ) & biHeader, DIB_RGB_COLORS);
     memcpy(imageData.data() + sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER), lpPixels, biHeader.biSizeImage);
 
     delete[] lpPixels;
@@ -70,12 +69,11 @@ std::vector<BYTE> captureScreenToMemory()
  * @param serverIP IP-адрес сервера, на который отправляется запрос.
  * @param port Порт, на который устанавливается соединение для отправки данных.
  */
-void sendImageToServer(const std::vector<BYTE> &imageData, const std::string &serverIP, int port)
-{
+void sendImageToServer(const std::vector <BYTE> &imageData, const std::string &serverIP, int port) {
 
-    SetConsoleCP(CP_UTF8);    
+    SetConsoleCP(CP_UTF8);
     SetConsoleOutputCP(CP_UTF8);
-    
+
     WSADATA wsaData;
     SOCKET sock;
     struct sockaddr_in server;
@@ -87,8 +85,7 @@ void sendImageToServer(const std::vector<BYTE> &imageData, const std::string &se
     server.sin_family = AF_INET;
     server.sin_port = htons(port);
 
-    if (connect(sock, (struct sockaddr *)&server, sizeof(server)) < 0)
-    {
+    if (connect(sock, (struct sockaddr *) &server, sizeof(server)) < 0) {
         std::cerr << "Соединение не удалось" << std::endl;
         closesocket(sock);
         WSACleanup();
